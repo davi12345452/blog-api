@@ -12,3 +12,53 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum UserType {
+  COMMON
+  ADMIN
+}
+
+model User {
+  id               String            @unique @default(uuid())
+  email            String            @unique
+  name             String
+  password         String
+  type             UserType          @default(COMMON)
+
+  updated_at       DateTime          @updatedAt
+  created_at       DateTime          @default(now())
+
+  Articles         Article[]
+  @@map("user")
+}
+
+model Category {
+  id               String            @unique @default(uuid())
+  name             String
+  slug             String            @unique
+  description      String 
+
+  updated_at       DateTime          @updatedAt
+  created_at       DateTime          @default(now())
+
+  Articles         Article[]
+  @@map("category")
+}
+model Article {
+  id               String            @unique @default(uuid())
+  title            String
+  slug             String            @unique
+  content          String 
+
+  category_id      String
+  Category         Category          @relation(fields: [category_id], references: [id])
+  user_id          String
+  User             User              @relation(fields: [user_id], references: [id])
+
+  updated_at       DateTime          @updatedAt
+  created_at       DateTime          @default(now())
+
+  @@map("article")
+}
+
+
