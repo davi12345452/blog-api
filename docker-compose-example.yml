@@ -1,0 +1,13 @@
+version: "3"
+
+services: 
+  database:
+    image: postgres:alpine
+    container_name: {NOME DO CONTAINER}
+    restart: always
+    ports:
+      - 5432:5432 // PORTA PADRÃO
+    environment: 
+      - POSTGRES_USER={USUÁRIO DE ACESSO AO POSTGRES DB}
+      - POSTGRES_PASSWORD={SENHA DE ACESSO AO POSTGRES DB}
+      - POSTGRES_DB={NOME DO POSTGRES DB}
