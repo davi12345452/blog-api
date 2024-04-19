@@ -8,8 +8,8 @@ import { AuthService } from '../auth/auth.service';
 export class CategoryService {
   constructor(private readonly authService: AuthService) {}
   async create(req: Request, dtoData: CreateCategoryDto) {
-    const accessToken = req.headers.authorization;
-    
+    const user = req['user'];
+    return [dtoData, user];
   }
 
   findAll() {

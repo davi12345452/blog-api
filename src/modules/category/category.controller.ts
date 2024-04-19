@@ -12,15 +12,15 @@ import {
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { JwtStrategy } from '../auth/strategies/jwt-strategy';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  @UseGuards(JwtStrategy)
-  create(@Body() createCategoryDto: CreateCategoryDto, @Req() req) {
+  @UseGuards(AuthGuard('jwt'))
+  create(@Req() req, @Body() createCategoryDto: CreateCategoryDto) {
     return this.categoryService.create(req, createCategoryDto);
   }
 
