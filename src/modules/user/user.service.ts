@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { BadRequestSwagger } from 'src/swagger/helpers/BadRequestError';
+import { hashSync } from 'bcrypt';
 
 /***
  * LISTA DE ERROS NO USER SERVICE (USER_ERROR-{}):
@@ -17,13 +18,20 @@ export class UserService {
     });
     if (user) {
       const messageError = new BadRequestSwagger(
-        'Email already in user',
+        'Email already in use',
         'The email passed to create account has already in use',
         'USER_ERROR-01',
         'POST {api_domain}/user/',
       );
       throw new BadRequestException(messageError);
     }
+    return await this.prisma.user.create({
+      data: {
+        name: createUserDto.name,
+        email: createUserDto.email,
+        password: hashSync(createUserDto.password, 10),
+      },
+    });
   }
 
   async findAll() {
