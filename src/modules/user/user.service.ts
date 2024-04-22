@@ -7,11 +7,9 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { BadRequestSwagger } from 'src/swagger/helpers/BadRequestError';
 import { hashSync } from 'bcrypt';
 import { Request } from 'express';
-import { ForbiddenRequestSwagger } from 'src/swagger/helpers/ForbiddenRequestError';
-import { NotFoundRequestSwagger } from 'src/swagger/helpers/NotFoundRequestErrro';
+import { ErrorsUserLogs } from './utils/errors-user-logs';
 
 /***
  * LISTA DE ERROS NO USER SERVICE (USER_ERROR-{}):
@@ -20,40 +18,41 @@ import { NotFoundRequestSwagger } from 'src/swagger/helpers/NotFoundRequestErrro
  */
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private logErrors: ErrorsUserLogs,
+  ) {}
   async create(createUserDto: CreateUserDto) {
     try {
-      const user = await this.prisma.user.create({
+      const { name, email } = createUserDto;
+      const hashedPassword = hashSync(createUserDto.password, 10);
+
+      const newUser = await this.prisma.user.create({
         data: {
-          name: createUserDto.name,
-          email: createUserDto.email.toLowerCase(),
-          password: hashSync(createUserDto.password, 10),
+          name,
+          email: email.toLowerCase(),
+          password: hashedPassword,
         },
       });
+
+      const { id, created_at, updated_at } = newUser;
+
       return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
+        id,
+        name,
+        email,
+        created_at,
+        updated_at,
       };
     } catch (error) {
+      console.error({
+        message: 'Some error ocurred to create user',
+        error,
+      });
       if (error.code == 'P2002') {
-        const messageError = new BadRequestSwagger(
-          'Email already in use',
-          'The email passed to create account has already in use',
-          'USER_ERROR-01',
-          'POST {api_domain}/user/',
-        );
-        throw new BadRequestException(messageError);
+        throw new BadRequestException(this.logErrors.USER_ERROR_O1);
       } else {
-        const messageError = new BadRequestSwagger(
-          'Some internal error ocurred',
-          error.response,
-          error.code,
-          'POST {api_domain}/user/',
-        );
-        throw new BadRequestException(messageError);
+        throw new BadRequestException(this.logErrors.USER_ERROR_02);
       }
     }
   }
@@ -61,45 +60,46 @@ export class UserService {
   async findAll(req: Request) {
     const userFromReq = req['user'];
     if (userFromReq.type != 'ADMIN') {
-      const messageError = new ForbiddenRequestSwagger(
-        'Only admin can call this endpoint',
-        `Only admin users can access all users information. Your type of user is: ${userFromReq.type}`,
-        'USER_ERROR-02',
-        'GET {api_domain}/user/',
-      );
-      throw new ForbiddenException(messageError);
+      throw new ForbiddenException(this.logErrors.USER_ERROR_03);
     }
-    return await this.prisma.user.findMany();
+    return await this.prisma.user.findMany({ select: { password: false } });
   }
 
   async findOne(req: Request, id: string) {
     const userFromReq = req['user'];
     if (userFromReq.id != id && userFromReq.type != 'ADMIN') {
-      const messageError = new ForbiddenRequestSwagger(
-        'You just can access your user information',
-        `Only admin users can access another users informations. Your type of user is: ${userFromReq.type}`,
-        'USER_ERROR-03',
-        'GET {api_domain}/user/:id',
-      );
-      throw new ForbiddenException(messageError);
+      throw new ForbiddenException(this.logErrors.USER_ERROR_04);
     }
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        password: false,
+      },
+    });
     if (!user) {
-      const messageError = new NotFoundRequestSwagger(
-        'User id informed not exists',
-        'ID informed in parametres not pertences to a user in our database',
-        'USER_ERROR-04',
-        'GET {api_domain}/user/:id',
-      );
-      throw new NotFoundException(messageError);
+      throw new NotFoundException(this.logErrors.USER_ERROR_05);
     }
+    return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(req: Request, updateUserDto: UpdateUserDto, id: string) {
     return `This action ${updateUserDto} updates a #${id} user`;
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(req: Request, id: string) {
+    const userFromReq = req['user'];
+    if (userFromReq.id != id) {
+      throw new ForbiddenException(this.logErrors.USER_ERROR_06);
+    }
+    try {
+      await this.prisma.user.delete({ where: { id } });
+      return { message: 'Succes to delete user', id: userFromReq.id };
+    } catch (error) {
+      console.error({
+        message: 'Some error ocurred to delete user',
+        error,
+      });
+      throw new BadRequestException(this.logErrors.USER_ERROR_07);
+    }
   }
 }
