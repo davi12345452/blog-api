@@ -15,51 +15,51 @@ import { NotFoundRequestSwagger } from 'src/swagger/helpers/NotFoundRequestErrro
 
 export class ErrorsCategoryLogs {
   CATEGORY_ERROR_O1 = new ForbiddenRequestSwagger(
-    'Email already in use',
-    'The email passed to create account has already in use',
-    'USER_ERROR-01',
-    'POST {api_domain}/user/',
+    'User must be ADMIN',
+    'User must be ADMIN to create any category',
+    'CATEGORY_ERROR-01',
+    'POST {api_domain}/category/',
   );
 
   CATEGORY_ERROR_02 = new BadRequestSwagger(
     'Some internal error ocurred',
-    'Some internal error ocurred in user creation',
-    'USER_ERROR-02',
-    'POST {api_domain}/user/',
+    'Some internal error ocurred in category creation',
+    'CATEGORY_ERROR-02',
+    'POST {api_domain}/category/',
   );
 
   CATEGORY_ERROR_03 = new NotFoundRequestSwagger(
-    'Only admin can call this endpoint',
-    `Only admin users can access all users information. Your type of user is: COMMON`,
-    'USER_ERROR-03',
-    'GET {api_domain}/user/',
+    'Category ID Invalid',
+    `ID passed dont belongs to any category in database`,
+    'CATEGORY_ERROR-03',
+    'GET {api_domain}/category/:id',
   );
 
   CATEGORY_ERROR_04 = new ForbiddenRequestSwagger(
-    'You just can access your user information',
-    `Only admin users can access another users informations. Your type of user is COMMON`,
-    'USER_ERROR-04',
-    'GET {api_domain}/user/:id',
+    'User must be ADMIN',
+    'User must be ADMIN to edit any category',
+    'CATEGORY_ERROR-04',
+    'PUT {api_domain}/category/:id',
   );
 
   CATEGORY_ERROR_05 = new BadRequestSwagger(
-    'User id informed not exists',
-    'ID informed in parametres not pertences to a user in our database',
-    'USER_ERROR-05',
-    'GET {api_domain}/user/:id',
+    'Some internal error ocurred',
+    'Some internal error ocurred in category edition',
+    'CATEGORY_ERROR-05',
+    'PUT {api_domain}/category/:id',
   );
 
   CATEGORY_ERROR_06 = new ForbiddenRequestSwagger(
-    'Some internal error ocurred',
-    'Some internal error ocurred in user update',
-    'USER_ERROR-07',
-    'PUT {api_domain}/user/:id',
+    'User must be ADMIN',
+    'User must be ADMIN to delete any category',
+    'CATEGORY_ERROR-06',
+    'DELETE {api_domain}/category/:id',
   );
 
   CATEGORY_ERROR_07 = new BadRequestSwagger(
     'Some internal error ocurred',
-    'Some internal error ocurred in user deletion',
-    'USER_ERROR-07',
-    'DELETE {api_domain}/user/:id',
+    'Some internal error ocurred in category deletion',
+    'CATEGORY_ERROR-07',
+    'DELETE {api_domain}/category/:id',
   );
 }

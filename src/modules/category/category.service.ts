@@ -18,6 +18,11 @@ export class CategoryService {
     private readonly prisma: PrismaService,
   ) {}
 
+  /**
+   * Esta função é utilizada no endpoint de criação de categorias para o sistema. Ela
+   * só pode ser chamada por usuários admins. Apenas administradores podem criar cate-
+   * gorias.
+   */
   async create(req: Request, data: CreateCategoryDto) {
     const userFromReq = req['user'];
     if (userFromReq.type != 'ADMIN') {
@@ -37,12 +42,21 @@ export class CategoryService {
     }
   }
 
+  /**
+   * Permite visualizar várias categorias. Pode ser chamada por qualquer
+   * usuário.
+   */
   async findAll(limit?: number) {
     if (limit) {
       return await this.prisma.category.findMany({ take: limit });
     }
     return await this.prisma.category.findMany();
   }
+
+  /**
+   * Permite visualizar uma categoria específica. Pode ser chamada por qualquer
+   * usuário.
+   */
 
   async findOne(id: string) {
     const category = await this.prisma.category.findUnique({ where: { id } });
@@ -52,6 +66,10 @@ export class CategoryService {
     return category;
   }
 
+  /**
+   * Permite editar uma categoria específica. Essa função é utilizada em um endpoint
+   * e só pode ser chamada por ADMIN.
+   */
   async update(req: Request, id: string, data: UpdateCategoryDto) {
     const userFromReq = req['user'];
     if (userFromReq.type != 'ADMIN') {
@@ -65,6 +83,10 @@ export class CategoryService {
     }
   }
 
+  /**
+   * Permite deletar uma categoria. Essa função é utilizada em um endpoint e
+   * só pode ser chamada por usuários ADMIN.
+   */
   async remove(req: Request, id: string) {
     const userFromReq = req['user'];
     if (userFromReq.type != 'ADMIN') {

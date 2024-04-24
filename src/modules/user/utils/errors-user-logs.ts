@@ -53,13 +53,13 @@ export class ErrorsUserLogs {
     'Some internal error ocurred',
     'Some internal error ocurred in user update',
     'USER_ERROR-07',
-    'PUT {api_domain}/user/:id',
+    'PUT {api_domain}/user/',
   );
 
   USER_ERROR_07 = new BadRequestSwagger(
     'Some internal error ocurred',
     'Some internal error ocurred in user deletion',
     'USER_ERROR-07',
-    'DELETE {api_domain}/user/:id',
+    'DELETE {api_domain}/user/',
   );
 }
