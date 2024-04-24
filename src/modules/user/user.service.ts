@@ -87,8 +87,15 @@ export class UserService {
     if (userFromReq.id != id) {
       throw new ForbiddenException(this.logErrors.USER_ERROR_06);
     }
+    const data: any = {};
+    if (updateUserDto.name) {
+      data.name = updateUserDto.name;
+    }
     try {
-      
+      await this.prisma.user.update({
+        where: { id: userFromReq.id },
+        data,
+      });
     } catch (error) {
       console.error({
         message: 'Some error ocurred to update user',

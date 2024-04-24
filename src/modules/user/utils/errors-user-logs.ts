@@ -42,13 +42,27 @@ export class ErrorsUserLogs {
     'You just can delete your account',
     `You can only delete your account. Id passed dont belongs to you.`,
     'USER_ERROR-06',
-    'DELETE {api_domain}/user/:id',
+    'PUT {api_domain}/user/:id',
   );
 
   USER_ERROR_07 = new BadRequestSwagger(
     'Some internal error ocurred',
     'Some internal error ocurred in user deletion',
     'USER_ERROR-07',
-    'DELETE {api_domain}/user/',
+    'PUT {api_domain}/user/:id',
+  );
+
+  USER_ERROR_08 = new ForbiddenRequestSwagger(
+    'You just can delete your account',
+    `You can only delete your account. Id passed dont belongs to you.`,
+    'USER_ERROR-06',
+    'DELETE {api_domain}/user/:id',
+  );
+
+  USER_ERROR_09 = new BadRequestSwagger(
+    'Some internal error ocurred',
+    'Some internal error ocurred in user deletion',
+    'USER_ERROR-07',
+    'DELETE {api_domain}/user/:id',
   );
 }
