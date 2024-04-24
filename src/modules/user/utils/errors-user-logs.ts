@@ -39,15 +39,15 @@ export class ErrorsUserLogs {
   );
 
   USER_ERROR_06 = new ForbiddenRequestSwagger(
-    'You just can delete your account',
-    `You can only delete your account. Id passed dont belongs to you.`,
+    'You just can update your account',
+    `You can only update your account. Id passed dont belongs to you.`,
     'USER_ERROR-06',
     'PUT {api_domain}/user/:id',
   );
 
   USER_ERROR_07 = new BadRequestSwagger(
     'Some internal error ocurred',
-    'Some internal error ocurred in user deletion',
+    'Some internal error ocurred in user update',
     'USER_ERROR-07',
     'PUT {api_domain}/user/:id',
   );
