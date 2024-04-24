@@ -11,11 +11,6 @@ import { hashSync } from 'bcrypt';
 import { Request } from 'express';
 import { ErrorsUserLogs } from './utils/errors-user-logs';
 
-/***
- * LISTA DE ERROS NO USER SERVICE (USER_ERROR-{}):
- * - 01: Email que se tenta cadastrar já está em uso
- * - 02: Um usuário que não é admin tentou acessar a rota para chamar todos o usuários
- */
 @Injectable()
 export class UserService {
   constructor(
