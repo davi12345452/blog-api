@@ -1,31 +1,77 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Request } from 'express';
-import { AuthService } from '../auth/auth.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { ErrorsCategoryLogs } from './utils/errors-category-logs';
+import { createSlug } from './utils/create-slug';
 
 @Injectable()
 export class CategoryService {
-  constructor(private readonly authService: AuthService) {}
-  async create(req: Request, dtoData: CreateCategoryDto) {
-    const user = req['user'];
-    return [dtoData, user];
+  constructor(
+    private readonly logsError: ErrorsCategoryLogs,
+    private readonly prisma: PrismaService,
+  ) {}
+
+  async create(req: Request, data: CreateCategoryDto) {
+    const userFromReq = req['user'];
+    if (userFromReq.type != 'ADMIN') {
+      throw new ForbiddenException();
+    }
+    try {
+      return await this.prisma.category.create({
+        data: {
+          name: data.name,
+          description: data.description,
+          slug: createSlug(data.name),
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException();
+    }
   }
 
-  findAll() {
-    return `This action returns all category`;
+  async findAll(limit: number) {
+    return await this.prisma.category.findMany({ take: limit });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string) {
+    const category = await this.prisma.category.findUnique({ where: { id } });
+    if (!category) {
+      throw new NotFoundException();
+    }
+    return category;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    console.log(updateCategoryDto);
-    return `This action updates a #${id} category`;
+  async update(req: Request, id: string, data: UpdateCategoryDto) {
+    const userFromReq = req['user'];
+    if (userFromReq.type != 'ADMIN') {
+      throw new ForbiddenException();
+    }
+    try {
+      return await this.prisma.category.update({ where: { id }, data });
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException();
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(req: Request, id: string) {
+    const userFromReq = req['user'];
+    if (userFromReq.type != 'ADMIN') {
+      throw new ForbiddenException();
+    }
+    try {
+      return await this.prisma.category.delete({ where: { id } });
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException();
+    }
   }
 }
