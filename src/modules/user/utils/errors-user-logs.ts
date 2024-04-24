@@ -9,10 +9,8 @@ import { NotFoundRequestSwagger } from 'src/swagger/helpers/NotFoundRequestErrro
  * - 03: Usuário que tenta acessar todos os usuários não é admin.
  * - 04: Usuário tenta acessar informações de outro usuário pelo ID, sendo que não possui autorização
  * - 05: ID informado na consulta não é válido, ou seja, não há um usuário.
- * - 06: Os usuários somente podem atualizar os seus usuários.
- * - 07: Algum erro interno ocorreu ao atualizar os usuários
- * - 08: Somente o usuário dono da conta pode deletá-lo
- * - 09: Algum erro interno aconteceu ao tentar deletar o usuário
+ * - 06: Algum erro interno ocorreu ao atualizar os usuários
+ * - 07: Algum erro interno aconteceu ao tentar deletar o usuário
  */
 
 export class ErrorsUserLogs {
@@ -51,28 +49,14 @@ export class ErrorsUserLogs {
     'GET {api_domain}/user/:id',
   );
 
-  USER_ERROR_06 = new ForbiddenRequestSwagger(
-    'You just can update your account',
-    `You can only update your account. Id passed dont belongs to you.`,
-    'USER_ERROR-06',
-    'PUT {api_domain}/user/:id',
-  );
-
-  USER_ERROR_07 = new BadRequestSwagger(
+  USER_ERROR_06 = new BadRequestSwagger(
     'Some internal error ocurred',
     'Some internal error ocurred in user update',
     'USER_ERROR-07',
     'PUT {api_domain}/user/:id',
   );
 
-  USER_ERROR_08 = new ForbiddenRequestSwagger(
-    'You just can delete your account',
-    `You can only delete your account. Id passed dont belongs to you.`,
-    'USER_ERROR-06',
-    'DELETE {api_domain}/user/:id',
-  );
-
-  USER_ERROR_09 = new BadRequestSwagger(
+  USER_ERROR_07 = new BadRequestSwagger(
     'Some internal error ocurred',
     'Some internal error ocurred in user deletion',
     'USER_ERROR-07',

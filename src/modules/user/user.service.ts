@@ -17,6 +17,11 @@ export class UserService {
     private prisma: PrismaService,
     private logErrors: ErrorsUserLogs,
   ) {}
+
+  /**
+   * Essa função é utilizada para a criação de um usuário. É necessário informar
+   * o nome, uma senha e um email único, ou seja, não pode ter sido utilizado.
+   */
   async create(createUserDto: CreateUserDto) {
     try {
       const { name, email } = createUserDto;
@@ -52,6 +57,10 @@ export class UserService {
     }
   }
 
+  /**
+   * Este função permite um usuário autenticado como ADMIN a ter acesso às
+   * informações de todos os usuários da plataforma.
+   */
   async findAll(req: Request) {
     const userFromReq = req['user'];
     if (userFromReq.type != 'ADMIN') {
@@ -60,6 +69,10 @@ export class UserService {
     return await this.prisma.user.findMany({ select: { password: false } });
   }
 
+  /**
+   * Esta função permite visualizar um usuário específico. Se esse usuário não for o mesmo
+   * que chama o endpoint, deve ter autenticação ADMIN.
+   */
   async findOne(req: Request, id: string) {
     const userFromReq = req['user'];
     if (userFromReq.id != id && userFromReq.type != 'ADMIN') {
@@ -77,11 +90,13 @@ export class UserService {
     return user;
   }
 
-  async update(req: Request, updateUserDto: UpdateUserDto, id: string) {
+  /**
+   * Permite que o usuário que chama o Endpoint atualize seus dados não essenciais. Não pode
+   * alterar o email, por conta da questão de unicidade no sistema. Senha é em outro lugar,
+   * com uma segurança maior.
+   */
+  async update(req: Request, updateUserDto: UpdateUserDto) {
     const userFromReq = req['user'];
-    if (userFromReq.id != id) {
-      throw new ForbiddenException(this.logErrors.USER_ERROR_06);
-    }
     const data: any = {};
     if (updateUserDto.name) {
       data.name = updateUserDto.name;
@@ -96,24 +111,25 @@ export class UserService {
         message: 'Some error ocurred to update user',
         error,
       });
-      throw new BadRequestException(this.logErrors.USER_ERROR_07);
+      throw new BadRequestException(this.logErrors.USER_ERROR_06);
     }
   }
 
-  async remove(req: Request, id: string) {
+  /**
+   * Permite que um usuário delete a sua conta. É necessário que seja o próprio usuário
+   * que faça isso.
+   */
+  async remove(req: Request) {
     const userFromReq = req['user'];
-    if (userFromReq.id != id) {
-      throw new ForbiddenException(this.logErrors.USER_ERROR_08);
-    }
     try {
-      await this.prisma.user.delete({ where: { id } });
+      await this.prisma.user.delete({ where: { id: userFromReq.id } });
       return { message: 'Succes to delete user', id: userFromReq.id };
     } catch (error) {
       console.error({
         message: 'Some error ocurred to delete user',
         error,
       });
-      throw new BadRequestException(this.logErrors.USER_ERROR_09);
+      throw new BadRequestException(this.logErrors.USER_ERROR_07);
     }
   }
 }
