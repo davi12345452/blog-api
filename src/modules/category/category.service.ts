@@ -21,7 +21,7 @@ export class CategoryService {
   async create(req: Request, data: CreateCategoryDto) {
     const userFromReq = req['user'];
     if (userFromReq.type != 'ADMIN') {
-      throw new ForbiddenException();
+      throw new ForbiddenException(this.logsError.CATEGORY_ERROR_O1);
     }
     try {
       return await this.prisma.category.create({
@@ -33,18 +33,21 @@ export class CategoryService {
       });
     } catch (error) {
       console.error(error);
-      throw new BadRequestException();
+      throw new BadRequestException(this.logsError.CATEGORY_ERROR_02);
     }
   }
 
-  async findAll(limit: number) {
-    return await this.prisma.category.findMany({ take: limit });
+  async findAll(limit?: number) {
+    if (limit) {
+      return await this.prisma.category.findMany({ take: limit });
+    }
+    return await this.prisma.category.findMany();
   }
 
   async findOne(id: string) {
     const category = await this.prisma.category.findUnique({ where: { id } });
     if (!category) {
-      throw new NotFoundException();
+      throw new NotFoundException(this.logsError.CATEGORY_ERROR_03);
     }
     return category;
   }
@@ -52,26 +55,26 @@ export class CategoryService {
   async update(req: Request, id: string, data: UpdateCategoryDto) {
     const userFromReq = req['user'];
     if (userFromReq.type != 'ADMIN') {
-      throw new ForbiddenException();
+      throw new ForbiddenException(this.logsError.CATEGORY_ERROR_04);
     }
     try {
       return await this.prisma.category.update({ where: { id }, data });
     } catch (error) {
       console.error(error);
-      throw new BadRequestException();
+      throw new BadRequestException(this.logsError.CATEGORY_ERROR_05);
     }
   }
 
   async remove(req: Request, id: string) {
     const userFromReq = req['user'];
     if (userFromReq.type != 'ADMIN') {
-      throw new ForbiddenException();
+      throw new ForbiddenException(this.logsError.CATEGORY_ERROR_06);
     }
     try {
       return await this.prisma.category.delete({ where: { id } });
     } catch (error) {
       console.error(error);
-      throw new BadRequestException();
+      throw new BadRequestException(this.logsError.CATEGORY_ERROR_07);
     }
   }
 }
