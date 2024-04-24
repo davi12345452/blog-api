@@ -83,13 +83,25 @@ export class UserService {
   }
 
   async update(req: Request, updateUserDto: UpdateUserDto, id: string) {
-    return `This action ${updateUserDto} updates a #${id} user`;
+    const userFromReq = req['user'];
+    if (userFromReq.id != id) {
+      throw new ForbiddenException(this.logErrors.USER_ERROR_06);
+    }
+    try {
+      
+    } catch (error) {
+      console.error({
+        message: 'Some error ocurred to update user',
+        error,
+      });
+      throw new BadRequestException(this.logErrors.USER_ERROR_07);
+    }
   }
 
   async remove(req: Request, id: string) {
     const userFromReq = req['user'];
     if (userFromReq.id != id) {
-      throw new ForbiddenException(this.logErrors.USER_ERROR_06);
+      throw new ForbiddenException(this.logErrors.USER_ERROR_08);
     }
     try {
       await this.prisma.user.delete({ where: { id } });
@@ -99,7 +111,7 @@ export class UserService {
         message: 'Some error ocurred to delete user',
         error,
       });
-      throw new BadRequestException(this.logErrors.USER_ERROR_07);
+      throw new BadRequestException(this.logErrors.USER_ERROR_09);
     }
   }
 }
