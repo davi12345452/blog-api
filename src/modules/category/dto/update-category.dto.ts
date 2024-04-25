@@ -1,4 +1,16 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateCategoryDto } from './create-category.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsEmpty } from 'class-validator';
 
-export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}
+export class UpdateCategoryDto {
+  @IsOptional()
+  @ApiProperty()
+  name: string;
+
+  @IsOptional()
+  @ApiProperty()
+  description: string;
+
+  @IsEmpty()
+  @ApiProperty()
+  slug: string;
+}

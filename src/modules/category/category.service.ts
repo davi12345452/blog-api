@@ -75,6 +75,9 @@ export class CategoryService {
     if (userFromReq.type != 'ADMIN') {
       throw new ForbiddenException(this.logsError.CATEGORY_ERROR_04);
     }
+    if (data.name) {
+      data.slug = createSlug(data.name);
+    }
     try {
       return await this.prisma.category.update({ where: { id }, data });
     } catch (error) {
