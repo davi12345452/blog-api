@@ -14,7 +14,7 @@ import { NotFoundRequestSwagger } from 'src/swagger/helpers/NotFoundRequestErrro
  */
 
 export class ErrorsCategoryLogs {
-  CATEGORY_ERROR_O1 = new ForbiddenRequestSwagger(
+  CATEGORY_ERROR_01 = new ForbiddenRequestSwagger(
     'User must be ADMIN',
     'User must be ADMIN to create any category',
     'CATEGORY_ERROR-01',

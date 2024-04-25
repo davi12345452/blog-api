@@ -26,7 +26,7 @@ export class CategoryService {
   async create(req: Request, data: CreateCategoryDto) {
     const userFromReq = req['user'];
     if (userFromReq.type != 'ADMIN') {
-      throw new ForbiddenException(this.logsError.CATEGORY_ERROR_O1);
+      throw new ForbiddenException(this.logsError.CATEGORY_ERROR_01);
     }
     try {
       return await this.prisma.category.create({

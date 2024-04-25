@@ -14,7 +14,7 @@ import { NotFoundRequestSwagger } from 'src/swagger/helpers/NotFoundRequestErrro
  */
 
 export class ErrorsUserLogs {
-  USER_ERROR_O1 = new BadRequestSwagger(
+  USER_ERROR_01 = new BadRequestSwagger(
     'Email already in use',
     'The email passed to create account has already in use',
     'USER_ERROR-01',

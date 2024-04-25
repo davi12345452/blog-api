@@ -50,7 +50,7 @@ export class UserService {
         error,
       });
       if (error.code == 'P2002') {
-        throw new BadRequestException(this.logErrors.USER_ERROR_O1);
+        throw new BadRequestException(this.logErrors.USER_ERROR_01);
       } else {
         throw new BadRequestException(this.logErrors.USER_ERROR_02);
       }

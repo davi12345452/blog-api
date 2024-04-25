@@ -32,18 +32,18 @@ export class ArticleService {
       });
     } catch (error) {
       console.error(error);
-      throw new BadRequestException();
+      throw new BadRequestException(this.logsError.CATEGORY_ERROR_01);
     }
   }
 
-  async findAll() {
-    return await this.prisma.article.findMany();
+  async findAll(limit?: number) {
+    return await this.prisma.article.findMany({ take: limit });
   }
 
   async findOneById(id: string) {
     const article = await this.prisma.article.findUnique({ where: { id } });
     if (!article) {
-      throw new NotFoundException();
+      throw new NotFoundException(this.logsError.CATEGORY_ERROR_02);
     }
     return article;
   }
@@ -51,7 +51,7 @@ export class ArticleService {
   async findOneBySlug(slug: string) {
     const article = await this.prisma.article.findUnique({ where: { slug } });
     if (!article) {
-      throw new NotFoundException();
+      throw new NotFoundException(this.logsError.CATEGORY_ERROR_03);
     }
     return article;
   }
@@ -60,16 +60,16 @@ export class ArticleService {
     const userFromReq = req['user'];
     const article = await this.prisma.article.findUnique({ where: { id } });
     if (!article) {
-      throw new NotFoundException();
+      throw new NotFoundException(this.logsError.CATEGORY_ERROR_04);
     }
     if (article.id != userFromReq.id && userFromReq.type != 'ADMIN') {
-      throw new ForbiddenException();
+      throw new ForbiddenException(this.logsError.CATEGORY_ERROR_05);
     }
     try {
       return await this.prisma.article.update({ where: { id }, data });
     } catch (error) {
       console.error(error);
-      throw new BadRequestException();
+      throw new BadRequestException(this.logsError.CATEGORY_ERROR_06);
     }
   }
 
@@ -77,16 +77,24 @@ export class ArticleService {
     const userFromReq = req['user'];
     const article = await this.prisma.article.findUnique({ where: { id } });
     if (!article) {
-      throw new NotFoundException();
+      throw new NotFoundException(this.logsError.CATEGORY_ERROR_07);
     }
     if (article.id != userFromReq.id && userFromReq.type != 'ADMIN') {
-      throw new ForbiddenException();
+      throw new ForbiddenException(this.logsError.CATEGORY_ERROR_08);
     }
     try {
-      return await this.prisma.article.update({ where: { id }, data });
+      return await this.prisma.article.delete({ where: { id } });
     } catch (error) {
       console.error(error);
-      throw new BadRequestException();
+      throw new BadRequestException(this.logsError.CATEGORY_ERROR_09);
     }
+  }
+
+  async findAllByCategory(id: string) {
+    const category = await this.prisma.category.findUnique({ where: { id } });
+    if (!category) {
+      throw new NotFoundException(this.logsError.CATEGORY_ERROR_10);
+    }
+    return await this.prisma.article.findMany({ where: { id: category.id } });
   }
 }
