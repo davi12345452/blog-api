@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -15,30 +20,73 @@ export class ArticleService {
 
   async create(req: Request, data: CreateArticleDto) {
     const userFromReq = req['user'];
-    return await this.prisma.article.create({
-      data: {
-        title: data.title,
-        content: data.content,
-        slug: createSlug(data.title),
-        user_id: userFromReq.id,
-        category_id: data.category_id,
-      },
-    });
+    try {
+      return await this.prisma.article.create({
+        data: {
+          title: data.title,
+          content: data.content,
+          slug: createSlug(data.title),
+          user_id: userFromReq.id,
+          category_id: data.category_id,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException();
+    }
   }
 
   async findAll() {
     return await this.prisma.article.findMany();
   }
 
-  async findOne(id: string) {
-    return await this.prisma.article.findUnique({ where: { id } });
+  async findOneById(id: string) {
+    const article = await this.prisma.article.findUnique({ where: { id } });
+    if (!article) {
+      throw new NotFoundException();
+    }
+    return article;
+  }
+
+  async findOneBySlug(slug: string) {
+    const article = await this.prisma.article.findUnique({ where: { slug } });
+    if (!article) {
+      throw new NotFoundException();
+    }
+    return article;
   }
 
   async update(req: Request, id: string, data: UpdateArticleDto) {
-    return await this.prisma.article.update({ where: { id }, data });
+    const userFromReq = req['user'];
+    const article = await this.prisma.article.findUnique({ where: { id } });
+    if (!article) {
+      throw new NotFoundException();
+    }
+    if (article.id != userFromReq.id && userFromReq.type != 'ADMIN') {
+      throw new ForbiddenException();
+    }
+    try {
+      return await this.prisma.article.update({ where: { id }, data });
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException();
+    }
   }
 
   async remove(req: Request, id: string) {
-    return await this.prisma.article.delete({ where: { id } });
+    const userFromReq = req['user'];
+    const article = await this.prisma.article.findUnique({ where: { id } });
+    if (!article) {
+      throw new NotFoundException();
+    }
+    if (article.id != userFromReq.id && userFromReq.type != 'ADMIN') {
+      throw new ForbiddenException();
+    }
+    try {
+      return await this.prisma.article.update({ where: { id }, data });
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException();
+    }
   }
 }
