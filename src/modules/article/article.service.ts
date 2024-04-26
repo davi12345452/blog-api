@@ -18,6 +18,10 @@ export class ArticleService {
     private readonly logsError: ErrorsArticleLogs,
   ) {}
 
+  /**
+   * Está função é utilizada no endpoint de criação de artigos. É necessário
+   * possuir uma conta comum para publicar artigos.
+   */
   async create(req: Request, data: CreateArticleDto) {
     const userFromReq = req['user'];
     try {
@@ -36,10 +40,18 @@ export class ArticleService {
     }
   }
 
+  /**
+   * Função que é utilizada no endpoint que retorna todos artigos do sistema. Ideia é
+   * criar querys aqui e deixar o endpoint mais dinâmico.
+   */
   async findAll(limit?: number) {
     return await this.prisma.article.findMany({ take: limit });
   }
 
+  /**
+   * Função que permite encontrar um artigo em específico. É utilizada
+   * no endpoint para achar um artigo por seu ID.
+   */
   async findOneById(id: string) {
     const article = await this.prisma.article.findUnique({ where: { id } });
     if (!article) {
@@ -48,6 +60,10 @@ export class ArticleService {
     return article;
   }
 
+  /**
+   * Função que permite encontrar um artigo em específico. É utilizada
+   * no endpoint para achar um artigo por seu SLUG.
+   */
   async findOneBySlug(slug: string) {
     const article = await this.prisma.article.findUnique({ where: { slug } });
     if (!article) {
@@ -55,6 +71,11 @@ export class ArticleService {
     }
     return article;
   }
+
+  /**
+   * Função utilizada no endpoint de edição de um artigo. Pode ser chamada pelo usuário ao qual
+   * o artigo pertence, ou por um ADMIN do sistema.
+   */
 
   async update(req: Request, id: string, data: UpdateArticleDto) {
     const userFromReq = req['user'];
@@ -73,6 +94,10 @@ export class ArticleService {
     }
   }
 
+  /**
+   * Função utilizada no endpoint de remoção de um artigo. Pode ser chamada pelo
+   * dono do artigo, ou por um ADMIN do sistema.
+   */
   async remove(req: Request, id: string) {
     const userFromReq = req['user'];
     const article = await this.prisma.article.findUnique({ where: { id } });
@@ -89,6 +114,11 @@ export class ArticleService {
       throw new BadRequestException(this.logsError.CATEGORY_ERROR_09);
     }
   }
+
+  /**
+   * Função utilizada no endpoint de achar todos artigos por uma categoria específica. A ideia
+   * é integrar no findAll geral, utilizando uma query para categorias.
+   */
 
   async findAllByCategory(id: string) {
     const category = await this.prisma.category.findUnique({ where: { id } });
