@@ -4,13 +4,13 @@ import { NotFoundRequestSwagger } from 'src/swagger/helpers/NotFoundRequestErrro
 
 /***
  * LISTA DE ERROS NO USER SERVICE (CATEGORY_ERROR-{}):
- * - 01: Email que se tenta cadastrar já está em uso
- * - 02: Algum erro interno aconteceu ao tentar criar o usuário
- * - 03: Usuário que tenta acessar todos os usuários não é admin.
- * - 04: Usuário tenta acessar informações de outro usuário pelo ID, sendo que não possui autorização
- * - 05: ID informado na consulta não é válido, ou seja, não há um usuário.
- * - 06: Algum erro interno ocorreu ao atualizar os usuários
- * - 07: Algum erro interno aconteceu ao tentar deletar o usuário
+ * - 01: Usuário que chama a criação precisa ser ADMIN.
+ * - 02: Algum erro interno aconteceu na criação de categoria.
+ * - 03: ID passado como parâmetro não pertence a nenhuma categoria
+ * - 04: Usuário que chama a edição precisa ser ADMIN.
+ * - 05: Algum erro interno aconteceu na edição de categoria.
+ * - 06: Usuário que chama a deleção precisa ser ADMIN.
+ * - 07: Algum erro interno aconteceu na deleção de categoria.
  */
 
 export class ErrorsCategoryLogs {
