@@ -18,38 +18,38 @@ import { NotFoundRequestSwagger } from 'src/swagger/helpers/NotFoundRequestErrro
 
 export class ErrorsArticleLogs {
   CATEGORY_ERROR_01 = new BadRequestSwagger(
-    'User must be ADMIN',
-    'User must be ADMIN to create any category',
-    'CATEGORY_ERROR-01',
-    'POST {api_domain}/category/',
+    'Some error in article creation',
+    'Some error ocurred in creation of an article',
+    'ARTICLE_ERROR-01',
+    'POST {api_domain}/article/',
   );
 
   CATEGORY_ERROR_02 = new NotFoundRequestSwagger(
-    'Some internal error ocurred',
-    'Some internal error ocurred in category creation',
-    'CATEGORY_ERROR-02',
-    'POST {api_domain}/category/',
+    'ID invalid',
+    'Article ID passed to find specific article is invalid',
+    'ARTICLE_ERROR-02',
+    'GET {api_domain}/article/:id',
   );
 
   CATEGORY_ERROR_03 = new NotFoundRequestSwagger(
-    'Category ID Invalid',
-    `ID passed dont belongs to any category in database`,
-    'CATEGORY_ERROR-03',
-    'GET {api_domain}/category/:id',
+    'Slug invalid',
+    `Article SLUG passed to find specific article is invalid`,
+    'ARTICLE_ERROR-03',
+    'GET {api_domain}/article/slug/:slug',
   );
 
   CATEGORY_ERROR_04 = new NotFoundRequestSwagger(
-    'User must be ADMIN',
-    'User must be ADMIN to edit any category',
-    'CATEGORY_ERROR-04',
-    'PUT {api_domain}/category/:id',
+    'ID invalid',
+    'Article ID passed to edit specific article is invalid',
+    'ARTICLE_ERROR-04',
+    'PUT {api_domain}/article/:id',
   );
 
   CATEGORY_ERROR_05 = new ForbiddenRequestSwagger(
-    'Some internal error ocurred',
-    'Some internal error ocurred in category edition',
-    'CATEGORY_ERROR-05',
-    'PUT {api_domain}/category/:id',
+    'Invalid Credentials',
+    'Article dont belong to user and he is not an ADMIN',
+    'ARTICLE_ERROR-05',
+    'PUT {api_domain}/article/:id',
   );
 
   CATEGORY_ERROR_06 = new BadRequestSwagger(
