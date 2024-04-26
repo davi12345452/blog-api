@@ -4,16 +4,16 @@ import { NotFoundRequestSwagger } from 'src/swagger/helpers/NotFoundRequestErrro
 
 /***
  * LISTA DE ERROS NO USER SERVICE (CATEGORY_ERROR-{}):
- * - 01: Email que se tenta cadastrar já está em uso
- * - 02: Algum erro interno aconteceu ao tentar criar o usuário
- * - 03: Usuário que tenta acessar todos os usuários não é admin.
- * - 04: Usuário tenta acessar informações de outro usuário pelo ID, sendo que não possui autorização
- * - 05: ID informado na consulta não é válido, ou seja, não há um usuário.
- * - 06: Algum erro interno ocorreu ao atualizar os usuários
- * - 07: Algum erro interno aconteceu ao tentar deletar o usuário
- * - 08:
- * - 09:
- * - 10:
+ * - 01: Algum erro interno aconteceu na criação de artigo.
+ * - 02: ID passado como parâmetro não pertence a nenhum artigo.
+ * - 03: SLUG passado como parâmetro não pertence a nenhum artigo.
+ * - 04: ID passado como parâmetro não pertence a nenhum artigo na edição de artigo.
+ * - 05: Usuário inválido para editar artigo. Precisa ser ADMIN ou o dono.
+ * - 06: Algum erro interno aconteceu na edição de artigo.
+ * - 07: ID passado como parâmetro não pertence a nenhum artigo na deleção de artigo.
+ * - 08: Usuário inválido para deletar artigo. Precisa ser ADMIN ou o dono.
+ * - 09: Algum erro interno aconteceu na deleção de artigo.
+ * - 10: ID passado como parâmetro não pertence a nenhuma categoria
  */
 
 export class ErrorsArticleLogs {
