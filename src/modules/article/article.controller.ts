@@ -32,7 +32,12 @@ export class ArticleController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.articleService.findOne(id);
+    return this.articleService.findOneById(id);
+  }
+
+  @Get('slug/:slug')
+  findOneSlug(@Param('slug') slug: string) {
+    return this.articleService.findOneBySlug(slug);
   }
 
   @Put(':id')
@@ -49,5 +54,10 @@ export class ArticleController {
   @UseGuards(AuthGuard('jwt'))
   remove(@Req() req: Request, @Param('id') id: string) {
     return this.articleService.remove(req, id);
+  }
+
+  @Get('category/:id')
+  findAllCategory(@Param('id') id: string) {
+    return this.articleService.findAllByCategory(id);
   }
 }
