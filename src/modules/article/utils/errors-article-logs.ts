@@ -53,37 +53,37 @@ export class ErrorsArticleLogs {
   );
 
   CATEGORY_ERROR_06 = new BadRequestSwagger(
-    'User must be ADMIN',
-    'User must be ADMIN to delete any category',
-    'CATEGORY_ERROR-06',
-    'DELETE {api_domain}/category/:id',
+    'Some error in article edition',
+    'Some error ocurred in edition of an article',
+    'ARTICLE_ERROR-06',
+    'PUT {api_domain}/article/:id',
   );
 
   CATEGORY_ERROR_07 = new NotFoundRequestSwagger(
-    'Some internal error ocurred',
-    'Some internal error ocurred in category deletion',
-    'CATEGORY_ERROR-07',
-    'DELETE {api_domain}/category/:id',
+    'ID invalid',
+    'Article ID passed to edit specific article is invalid',
+    'ARTICLE_ERROR-07',
+    'DELETE {api_domain}/article/:id',
   );
 
   CATEGORY_ERROR_08 = new ForbiddenRequestSwagger(
-    'Some internal error ocurred',
-    'Some internal error ocurred in category deletion',
-    'CATEGORY_ERROR-07',
-    'DELETE {api_domain}/category/:id',
+    'Invalid Credentials',
+    'Article dont belong to user and he is not an ADMIN',
+    'ARTICLE_ERROR-08',
+    'DELETE {api_domain}/article/:id',
   );
 
   CATEGORY_ERROR_09 = new BadRequestSwagger(
-    'Some internal error ocurred',
-    'Some internal error ocurred in category deletion',
-    'CATEGORY_ERROR-07',
-    'DELETE {api_domain}/category/:id',
+    'Some error in article deletion',
+    'Some error ocurred in deletion of an article',
+    'ARTICLE_ERROR-09',
+    'DELETE {api_domain}/article/:id',
   );
 
   CATEGORY_ERROR_10 = new NotFoundRequestSwagger(
-    'Some internal error ocurred',
-    'Some internal error ocurred in category deletion',
-    'CATEGORY_ERROR-07',
-    'DELETE {api_domain}/category/:id',
+    'Invalid Category ID',
+    'Category ID passed to find specifics articles is invalid',
+    'ARTICLE_ERROR-10',
+    'GET {api_domain}/article/category/:id',
   );
 }
