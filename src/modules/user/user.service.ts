@@ -71,7 +71,7 @@ export class UserService {
 
   /**
    * Esta função permite visualizar um usuário específico. Se esse usuário não for o mesmo
-   * que chama o endpoint, deve ter autenticação ADMIN.
+   * que chama o endpoint, deve ter autenticação ADMIN. Caso não for, da erro.
    */
   async findOne(req: Request, id: string) {
     const userFromReq = req['user'];
