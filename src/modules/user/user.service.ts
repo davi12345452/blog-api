@@ -117,7 +117,7 @@ export class UserService {
 
   /**
    * Permite que um usuário delete a sua conta. É necessário que seja o próprio usuário
-   * que faça isso.
+   * que faça isso. Caso não for, da erro.
    */
   async remove(req: Request) {
     const userFromReq = req['user'];
