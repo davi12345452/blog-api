@@ -59,7 +59,7 @@ export class UserService {
 
   /**
    * Este função permite um usuário autenticado como ADMIN a ter acesso às
-   * informações de todos os usuários da plataforma.
+   * informações de todos os usuários da plataforma. Caso não for, da erro.
    */
   async findAll(req: Request) {
     const userFromReq = req['user'];
