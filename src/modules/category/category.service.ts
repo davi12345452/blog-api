@@ -88,7 +88,7 @@ export class CategoryService {
 
   /**
    * Permite deletar uma categoria. Essa função é utilizada em um endpoint e
-   * só pode ser chamada por usuários ADMIN.
+   * só pode ser chamada por usuários ADMIN. Caso não for, da erro.
    */
   async remove(req: Request, id: string) {
     const userFromReq = req['user'];
