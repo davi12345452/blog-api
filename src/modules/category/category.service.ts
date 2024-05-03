@@ -68,7 +68,7 @@ export class CategoryService {
 
   /**
    * Permite editar uma categoria específica. Essa função é utilizada em um endpoint
-   * e só pode ser chamada por ADMIN.
+   * e só pode ser chamada por ADMIN. Caso não for, da erro.
    */
   async update(req: Request, id: string, data: UpdateCategoryDto) {
     const userFromReq = req['user'];
