@@ -96,7 +96,7 @@ export class ArticleService {
 
   /**
    * Função utilizada no endpoint de remoção de um artigo. Pode ser chamada pelo
-   * dono do artigo, ou por um ADMIN do sistema.
+   * dono do artigo, ou por um ADMIN do sistema. Caso não for, da erro.
    */
   async remove(req: Request, id: string) {
     const userFromReq = req['user'];
@@ -117,7 +117,7 @@ export class ArticleService {
 
   /**
    * Função utilizada no endpoint de achar todos artigos por uma categoria específica. A ideia
-   * é integrar no findAll geral, utilizando uma query para categorias.
+   * é integrar no findAll geral, utilizando uma query para categorias. 
    */
 
   async findAllByCategory(id: string) {
