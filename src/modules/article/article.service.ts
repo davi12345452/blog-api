@@ -74,7 +74,7 @@ export class ArticleService {
 
   /**
    * Função utilizada no endpoint de edição de um artigo. Pode ser chamada pelo usuário ao qual
-   * o artigo pertence, ou por um ADMIN do sistema.
+   * o artigo pertence, ou por um ADMIN do sistema. Caso não for, da erro.
    */
 
   async update(req: Request, id: string, data: UpdateArticleDto) {
@@ -117,7 +117,7 @@ export class ArticleService {
 
   /**
    * Função utilizada no endpoint de achar todos artigos por uma categoria específica. A ideia
-   * é integrar no findAll geral, utilizando uma query para categorias. 
+   * é integrar no findAll geral, utilizando uma query para categorias.
    */
 
   async findAllByCategory(id: string) {
