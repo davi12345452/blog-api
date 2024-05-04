@@ -20,7 +20,7 @@ export class ArticleService {
 
   /**
    * Está função é utilizada no endpoint de criação de artigos. É necessário
-   * possuir uma conta comum para publicar artigos.
+   * possuir uma conta comum para publicar artigos. Caso não for, da erro.
    */
   async create(req: Request, data: CreateArticleDto) {
     const userFromReq = req['user'];
