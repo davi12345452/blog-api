@@ -11,6 +11,8 @@ import { NotFoundRequestSwagger } from 'src/swagger/helpers/NotFoundRequestErrro
  * - 05: ID informado na consulta não é válido, ou seja, não há um usuário.
  * - 06: Algum erro interno ocorreu ao atualizar os usuários
  * - 07: Algum erro interno aconteceu ao tentar deletar o usuário
+ * - 08: A senha informada é inválida para ser trocada
+ * - 09: Algum erro interno aconteceu ao tentar atualizar a senha do usuário
  */
 
 export class ErrorsUserLogs {
@@ -61,5 +63,19 @@ export class ErrorsUserLogs {
     'Some internal error ocurred in user deletion',
     'USER_ERROR-07',
     'DELETE {api_domain}/user/',
+  );
+
+  USER_ERROR_08 = new BadRequestSwagger(
+    'Actual password informed is invalid',
+    'Actual password informed is invalid',
+    'USER_ERROR-08',
+    'PUT {api_domain}/user/password',
+  );
+
+  USER_ERROR_09 = new BadRequestSwagger(
+    'Some internal error ocurred',
+    'Some internal error ocurred in user password update',
+    'USER_ERROR-09',
+    'PUT {api_domain}/user/password',
   );
 }

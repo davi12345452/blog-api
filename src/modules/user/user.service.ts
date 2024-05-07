@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -10,6 +11,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { hashSync } from 'bcrypt';
 import { Request } from 'express';
 import { ErrorsUserLogs } from './utils/errors-user-logs';
+import { UpdatePasswordDto } from './dto/update-password-user.dto';
 
 @Injectable()
 export class UserService {
@@ -130,6 +132,42 @@ export class UserService {
         error,
       });
       throw new BadRequestException(this.logErrors.USER_ERROR_07);
+    }
+  }
+
+  /**
+   * Esta função é utilizada no endpoint que permite o usuário atualizar a sua senha.
+   * Ela reconhece o usuário pela requisição, ou seja, precisa estar logado.
+   */
+  async updatePassword(req: Request, updatePasswordDto: UpdatePasswordDto) {
+    const userFromReq = req['user'];
+    const hashedAcutalPassword = hashSync(updatePasswordDto.actualPassword, 10);
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userFromReq.id },
+    });
+
+    if (user.password != hashedAcutalPassword) {
+      throw new UnauthorizedException(this.logErrors.USER_ERROR_08);
+    }
+
+    const hashedNewPassword = hashSync(updatePasswordDto.newPassword, 10);
+    try {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          password: hashedNewPassword,
+        },
+      });
+      return {
+        message: 'Password updated sucessufully',
+      };
+    } catch (error) {
+      console.error({
+        message: 'Some error ocurred to update password user',
+        error,
+      });
+      throw new BadRequestException(this.logErrors.USER_ERROR_09);
     }
   }
 }
