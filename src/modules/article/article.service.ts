@@ -44,8 +44,8 @@ export class ArticleService {
    * Função que é utilizada no endpoint que retorna todos artigos do sistema. Ideia é
    * criar querys aqui e deixar o endpoint mais dinâmico.
    */
-  async findAll(limit?: number) {
-    return await this.prisma.article.findMany({ take: limit });
+  async findAll() {
+    return await this.prisma.article.findMany();
   }
 
   /**
