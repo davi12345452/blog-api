@@ -14,7 +14,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const user = await this.authService.validateUser(email, password);
 
     if (!user) {
-      const messageError = new UnauthorizedRequestSwagger('', '', '', '');
+      const messageError = new UnauthorizedRequestSwagger(
+        'Authentication failed',
+        'Check the email or password',
+        'AUTH-ERROR-01',
+        '{API-DOMAIN}/auth/login',
+      );
       throw new UnauthorizedException(messageError);
     }
 
