@@ -15,7 +15,7 @@ export class UnauthorizedRequestSwagger {
 
   @ApiProperty({
     description: 'Type of error that can be referenced in another document.',
-    example: 'ANSWER-ERROR-01',
+    example: '{SERVICE}-ERROR-01',
   })
   type: string;
 
@@ -27,7 +27,7 @@ export class UnauthorizedRequestSwagger {
 
   @ApiProperty({
     description: 'Endpoint where the error occurred.',
-    example: 'api/answer/:id',
+    example: '{API DOMAIN}/{SERVICE}/',
   })
   instance: string;
 
