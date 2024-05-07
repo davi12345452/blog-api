@@ -104,10 +104,19 @@ export class UserService {
       data.name = updateUserDto.name;
     }
     try {
-      await this.prisma.user.update({
+      const user = await this.prisma.user.update({
         where: { id: userFromReq.id },
         data,
       });
+      const { id, name, email, created_at, updated_at } = user;
+
+      return {
+        id,
+        name,
+        email,
+        created_at,
+        updated_at,
+      };
     } catch (error) {
       console.error({
         message: 'Some error ocurred to update user',
