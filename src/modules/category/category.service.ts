@@ -46,10 +46,7 @@ export class CategoryService {
    * Permite visualizar várias categorias. Pode ser chamada por qualquer
    * usuário.
    */
-  async findAll(limit?: number) {
-    if (limit) {
-      return await this.prisma.category.findMany({ take: limit });
-    }
+  async findAll() {
     return await this.prisma.category.findMany();
   }
 
@@ -70,11 +67,12 @@ export class CategoryService {
    * Permite editar uma categoria específica. Essa função é utilizada em um endpoint
    * e só pode ser chamada por ADMIN. Caso não for, da erro.
    */
-  async update(req: Request, id: string, data: UpdateCategoryDto) {
+  async update(req: Request, id: string, dto: UpdateCategoryDto) {
     const userFromReq = req['user'];
     if (userFromReq.type != 'ADMIN') {
       throw new ForbiddenException(this.logsError.CATEGORY_ERROR_04);
     }
+    const data: any = { ...dto };
     if (data.name) {
       data.slug = createSlug(data.name);
     }
