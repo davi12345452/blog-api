@@ -14,6 +14,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { UpdatePasswordDto } from './dto/update-password-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -46,5 +47,14 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   remove(@Req() req: Request) {
     return this.userService.remove(req);
+  }
+
+  @Put()
+  @UseGuards(AuthGuard('jwt'))
+  updatePassoword(
+    @Req() req: Request,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ) {
+    return this.userService.updatePassword(req, updatePasswordDto);
   }
 }
